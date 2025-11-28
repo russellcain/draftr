@@ -1,0 +1,10 @@
+@import "tailwindcss";
+.fresh-gradient {
+  background-color: rgba(173, 134, 239, 1);
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(219, 234, 254),
+    rgba(201, 187, 247, 1),
+    rgba(208, 147, 223, 0.28)
+  );
+}
