@@ -1,14 +1,20 @@
 import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 import RedirectButton from "../islands/RedirectButton";
-import Table from "../islands/Table";
-import { TableData } from "../types/table";
+import SearchTable from "../islands/SearchTable";
+import { TableData, TableRow } from "../types/table";
 
 export const handler: Handlers<TableData> = {
   async GET(_req: Request, ctx: HandlerContext<TableData>) {
     try {
       const jsonText = await Deno.readTextFile("./data/player-salaries.json");
 
-      const items: TableData = JSON.parse(jsonText);
+      const data: TableRow[] = JSON.parse(jsonText);
+      const items = data.map((item) => {
+        return {
+          ...item,
+          salary_cap_hit: Number(item.salary_cap_hit)
+        }
+      })
       return { data: items };
     } catch (error) {
       console.error(`Unable to load player data. Error:${error}`);
@@ -33,11 +39,10 @@ export default function TablePage({ data }: PageProps<TableData>) {
             </div>
         
             <div className="w-1/2 flex justify-end">
-            {/* NOTE: You will need to create and import this HomepageButton component */}
             <RedirectButton href="/" displayText="Return Home" /> 
             </div>
       </div>
-        <Table items={items} headers={headers}/>
+        <SearchTable items={items} headers={headers}/>
     </div>
   );
 }
